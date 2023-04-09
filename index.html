@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Tres</title>
+        <meta name="description" content="Ensai RL Project: UNO Game">
+
+        <link rel=stylesheet href=style/style.css>
+        <link rel=icon href=img/logo.png>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src=js/constants.js></script>
+        <script src=js/create_join.js></script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <meta property="og:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:card" content="summary_large_image">
+    </head>
+    <body>
+        <div id=container>
+            <h1>UNO</h1>
+            <h2 class=info>Jeu de UNO</h2>
+            <h2><a href=https://www.officialgamerules.org/uno>Règles du jeux</a></h2>
+            <div class=box id=div-name>
+                <h3>Votre pseudo</h3>
+                <input id=player-name>
+            </div>
+            <div id=div-wrapper>
+                <div class=box id=div-start-game>
+                    <h2>NOUVELLE PARTIE</h2>
+                    <button onclick="createGame()">CREER</button>
+                </div>
+                <div class=box id=div-join-game>
+                    <h2>JOINDRE UNE PARTIE</h2>
+                    <h3>TAPEZ LE CODE DE LA PARTIE</h3>
+                    <input id=join-game>
+                    <br>
+                    <button onclick="joinGame()">JOIN</button>
+                </div>
+            </div>
+            <h2 class=info>By Timothée Obrecht, Anne-Sophie Le Bayon, Hugo Miccinilli - 2023</h2>
+        </div>
+    </body>
+</html>
