@@ -2,6 +2,7 @@
 let urlParams = new URLSearchParams(window.location.search);
 let game = urlParams.get("game");
 let id = urlParams.get("id");
+let dev_mode = urlParams.get("dev_mode");
 
 // Get player name + turn number
 let player_name, player_turn;
@@ -15,7 +16,6 @@ $.get(`${SERVERURL}player_data?game=${game}&id=${id}`,
 let turn = 0;
 let game_over = false;
 let card_id_selected = "";
-let color_selected = "";
 
 // Get updates on data
 let dataInterval;
@@ -31,7 +31,7 @@ function getData(){
                 turn = data["turn"]; 
                 
                 setCards(data["player_cards"]);
-                setStandings(data["num_cards"]);
+                setStandings(data["all_player_cards"]);
                 setTopcard(data["top_card"]);
                 setPlayerTurnDisplay();
             }
@@ -53,29 +53,40 @@ function setStandings(standings){
     $("#standings").html("");
     console.log("setStandings");
     console.log(standings);
+    console.log(dev_mode);
     for (let i=0; i<standings.length; i++){
         player = standings[i];
+        nb_card = player["cards"].length;
 
         let div_html = "<div class=player-info>";
         if (i == turn){
-            div_html = '<div class=player-info style="background-color:#f7913e;border:4px solid black">';
+            div_html = '<div class=player-info style="background-color:red;border:4px solid black">';
         }
         div_html += `<h2>${player["pseudo"]}</h2>`;
 
         div_html += "<br><div class=marker-card-div>";
-        for (let i=0; i<player["nb_card"]; i++){
-            if (i==0){ // This is necessary to make sure the player-info div has the right height
+        for (let i=0; i<nb_card; i++){
+            card = player["cards"][i];
+            card_number = card["number"];
+            card_color = card["color"];
+            card_type = card["type"];
+
+            if (i==0){
                 div_html += `<img src=img/logo2.png class=marker-card style='position:relative'>`;
             }
             else{
-            div_html += `<img src=img/logo2.png class=marker-card style='left:${i*8}%'>`;
+                div_html += `<img src=img/logo2.png class=marker-card style='left:${i*8}%'>`;
+            }
+
+            if (dev_mode.toLowerCase() === "true"){
+                div_html += `<span> ${card_number} - ${card_color} - ${card_type} </span>`;
             }
         }
         div_html += "</div></div>";
         $("#standings").append(div_html);
 
         // Check if someone has won and display winner message
-        if (player["nb_card"] == 0){
+        if (nb_card == 0){
             $("#win-display").css("display","block");
             $("#winner-name").html(`${player["pseudo"]} won the game!`);
             // Stop the update interval
@@ -140,7 +151,6 @@ function playCard(card){
     // which means we need to hide it on click
     $("#color-selection").css("display", "none");
     card_id_selected = "";
-    color_selected = "";
 
     // Send request to play card
     $.post(SERVERURL+"play",JSON.stringify({

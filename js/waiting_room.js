@@ -43,7 +43,7 @@ function getPlayers(){
 
             // check for game start
             if (data["start"] == "yes"){
-                location.href = `game.html?id=${id}&game=${game}`;
+                location.href = `game.html?id=${id}&game=${game}&dev_mode=${$("#see_all_cards").is(":checked")}`;
             }
 
             // check if player was kicked

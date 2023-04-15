@@ -25,9 +25,9 @@ Waiting room. View currently joined players, add AI players, start game once rea
             <h1>UNO</h1>
             <h2 class=info>Salle d'Attende</h2>
             <div class=box>
-                <h2>JOIN CODE: <span id="game-id"></span></h2>
+                <h2>CODE: <span id="game-id"></span></h2>
                 <div onclick="copyInvite()" style="cursor:pointer">
-                    <h2 class=info>Invite link (click to copy):</h2>
+                    <h2 class=info>Lien d'invitation: (cliquer pour copier):</h2>
                     <h3><a id="invite-link" target="_blank"></a></h3>
                 </div>
             </div>
@@ -38,6 +38,9 @@ Waiting room. View currently joined players, add AI players, start game once rea
                     <ul id="players">
                     </ul>
                 </div>
+                <label for="see_all_cards">
+                    <input type="checkbox" id="see_all_cards" name="see_all_cards">  Voir les cartes de tous les joueurs 
+                 </label>
                 <div class=box>
                     <button onclick="addAI()">AJOUTER UNE IA</button>
                     <br>
