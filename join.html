@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+Landing page of website; choose either to create a game or join existing game.
+-->
+<html>
+    <head>
+        <title>ENSAI UNO</title>
+
+        <link rel=stylesheet href=style/style.css>
+        <link rel=icon href=img/logo.png>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src=js/constants.js></script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Ensai RL Project: UNO Game">
+
+        <meta property="og:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:card" content="summary_large_image">
+    </head>
+    <body>
+        <div id="container">
+            <h1>TRES</h1>
+            <h2 class=info>The classic online Uno ripoff</h2>
+            <h2><a href=rules.html>View Rules</a></h2>
+            <div class=box id=div-code>
+                <h2>Join game: <span id=join-code></span></h2>
+            </div>
+            <div class=box id=div-name>
+                <h3>Please enter your name</h3>
+                <input id=player-name>
+                <br>
+                <button onclick="joinGame()">JOIN</button>
+            </div>
+            <h2 class=info>By Timothée Obrecht, Anne-Sophie Le Bayon, Hugo Miccinilli - 2023</h2>
+        </div>
+        <script src=js/join.js></script>
+    </body>
+</html>

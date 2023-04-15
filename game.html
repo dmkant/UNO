@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+Landing page of website; choose either to create a game
+or join existing game.
+-->
+<html>
+    <head>
+        <title>ENSAI UNO</title>
+
+        <link rel=stylesheet href=style/style.css>
+        <link rel=icon href=img/logo.png>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src=js/constants.js></script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Ensai RL Project: UNO Game">
+
+        <meta property="og:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:image" content="https://ensai.fr/wp-content/uploads/2019/05/Ensai-logo.png">
+        <meta property="twitter:card" content="summary_large_image">
+    </head>
+    <body>
+        <div id=play-container>
+            <h1>UNO</h1>
+            <!-- Where the winner message is displayed -->
+            <div id=win-display class=box style="display:none">
+                <h1 id=winner-name></h1>
+                <br>
+                <button onmousedown="returnToLobby()">Refaire une Partie</button>
+            </div>
+
+            <div id=div-grid>
+                <div style="grid-column:1 / span 2">
+                    <div id=player-turn-display class=box style="display:none">
+                        <h2>C'est ton tour</h2>
+                    </div>
+
+                    <div id=card-piles>
+                        <div class=card onmousedown="drawCard()">
+                            <!-- <img src=img/tres.png> -->
+                            <p>Pile</p>
+                        </div>
+                        <span id=top-card></span>
+                    </div> 
+
+                    <!-- Color selection -->
+                    <div id=color-selection class=box style="display:none">
+                        <h2 class=info>Selectionnez une couleur:</h2>
+                        <div id=color-card-grid>
+                            <div class=card  onmousedown="selectColor('BLUE')">Bleu<img src=img/col.png></div>
+                            <div class=card  onmousedown="selectColor('GREEN')">Vert<img src=img/col.png></div>
+                            <div class=card  onmousedown="selectColor('RED')">Rouge<img src=img/col.png></div>
+                            <div class=card  onmousedown="selectColor('YELLOW')">Jaune<img src=img/col.png></div>
+                        </div>
+                    </div>
+                    <!-- Display each of the cards that the player has -->
+                    <span>mmmmm</span>
+                    <div id=card-grid class=box>
+                    </div>                    
+                </div>
+
+                <div class=box id="standings-box">
+                    <!-- How many cards each player has left -->
+                    <h2 class=info>Plateau de Jeu</h2>
+                    <div id=standings></div>
+                </div>  
+
+            </div>
+        </div>
+        <script src=js/card.js></script>
+        <script src=js/game.js></script>
+    </body>
+</html>
