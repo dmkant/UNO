@@ -30,10 +30,11 @@ function getData(){
                 console.log(JSON.stringify(data));
                 turn = data["turn"]; 
                 
+                setTopcard(data["top_card"]);
                 setCards(data["player_cards"]);
                 setStandings(data["all_player_cards"]);
-                setTopcard(data["top_card"]);
                 setPlayerTurnDisplay();
+                setPassTurnDisplay(data["has_drew_card"]);
             }
         }
     )
@@ -46,6 +47,23 @@ function setCards(cards){
     for (let card of cards){
         $("#card-grid").append(getCardHTML(card,true));
     }
+}
+
+function setClassement(){
+    $.get(`${SERVERURL}classement?game=${game}&id=${id}`,
+        function(players){
+            if (players == "error: game not found"){
+                console.log("error: game not found");
+            }
+            else{
+                for (let player of players){
+                    player_pseudo = player["pseudo"];
+                    player_total_points = player["total_points"];
+                    $("#win-display").append( `<div class=card><p> ${player_pseudo} - ${player_total_points}</p></div>`);
+                }
+            }
+        }
+    )
 }
 
 function setStandings(standings){
@@ -67,9 +85,8 @@ function setStandings(standings){
         div_html += "<br><div class=marker-card-div>";
         for (let i=0; i<nb_card; i++){
             card = player["cards"][i];
-            card_number = card["number"];
+            card_value = card["value"];
             card_color = card["color"];
-            card_type = card["type"];
 
             if (i==0){
                 div_html += `<img src=img/logo2.png class=marker-card style='position:relative'>`;
@@ -79,7 +96,7 @@ function setStandings(standings){
             }
 
             if (dev_mode.toLowerCase() === "true"){
-                div_html += `<span> ${card_number} - ${card_color} - ${card_type} </span>`;
+                div_html += `<span> ${card_value} - ${card_color} </span>`;
             }
         }
         div_html += "</div></div>";
@@ -89,6 +106,7 @@ function setStandings(standings){
         if (nb_card == 0){
             $("#win-display").css("display","block");
             $("#winner-name").html(`${player["pseudo"]} won the game!`);
+            setClassement();
             // Stop the update interval
             clearInterval(dataInterval);
             game_over = true;
@@ -117,20 +135,21 @@ function setPlayerTurnDisplay(){
     }    
 }
 
-dataInterval = setInterval(getData,500);
-getData();
-
-// Show color selection box
-function showColorSelection(){
+function setPassTurnDisplay(has_drew_card){
     if (game_over){
         return "game over";
     }
-    // Check if turn is correct
-    if (turn != player_turn){
-        return "not player turn";
+    console.log("setPassTurnDisplay",player_turn,turn,has_drew_card)
+    if (turn == player_turn && has_drew_card){
+        $("#post_draw_button").css("display","block");
     }
-    $("#color-selection").css("display", "block");
+    else{
+        $("#post_draw_button").css("display", "none");
+    }    
 }
+
+dataInterval = setInterval(getData,500);
+getData();
 
 // Send move requests
 
@@ -150,6 +169,7 @@ function playCard(card){
     // This function may be called by the color-selection section,
     // which means we need to hide it on click
     $("#color-selection").css("display", "none");
+    $("#post_draw_button").css("display", "none");
     card_id_selected = "";
 
     // Send request to play card
@@ -164,12 +184,60 @@ function drawCard(){
     if (game_over){
         return "game over";
     }
+    // Check if turn is correct
+    if (turn != player_turn){
+        return "not player turn";
+    }
 
     // Send request to draw card to server
-    $.post(SERVERURL+"draw",JSON.stringify({
+    $.post(SERVERURL+"draw_card",JSON.stringify({
         game:game,
-        id:id
+        id:id,
     }),getData);
+}
+
+function setDrewCard(card){
+    // Clear currently displayed cards
+    $("#card-drew").html("");
+    // Add each card
+    $("#card-grid").append(getDrewCardHTML(card));
+}
+
+function passTurn(){
+    if (game_over){
+        return "game over";
+    }
+    // Check if turn is correct
+    if (turn != player_turn){
+        return "not player turn";
+    }
+
+    
+    // Send request to select color
+    $.post(SERVERURL+"pass_turn",JSON.stringify({
+            game:game,
+            id:id,
+        }),getData);
+
+    $("#post_draw_button").css("display", "none");
+}
+
+
+function playDrewCard(){
+    if (game_over){
+        return "game over";
+    }
+    // Check if turn is correct
+    if (turn != player_turn){
+        return "not player turn";
+    }
+
+    
+    // Send request to select color
+    $.post(SERVERURL+"play_drew_card",JSON.stringify({
+            game:game,
+            id:id,
+        }),getData);
 }
 
 // Show color selection box
@@ -183,6 +251,8 @@ function showColorSelection(card_id){
     }
     card_id_selected = card_id;
     $("#color-selection").css("display", "block");
+    $("#card-grid").css("display", "none");
+    $("#post_draw_button").css("display", "none");
 }
 
 function selectColor(color){
@@ -204,4 +274,5 @@ function selectColor(color){
 
     }),getData);
     playCard(card_id_selected);
+    $("#card-grid").css("display", "block");
 }

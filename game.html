@@ -28,7 +28,6 @@ or join existing game.
             <div id=win-display class=box style="display:none">
                 <h1 id=winner-name></h1>
                 <br>
-                <!-- <button onmousedown="returnToHome()">Retour à l'Accueil</button> -->
             </div>
 
             <div id=div-grid>
@@ -56,9 +55,16 @@ or join existing game.
                         </div>
                     </div>
                     <!-- Display each of the cards that the player has -->
-                    <span>mmmmm</span>
+                    <span>Votre Main</span>
                     <div id=card-grid class=box>
-                    </div>                    
+                    </div>
+                    <div id=post_draw_button style="display:none">
+                        <span>Carte Piochée</span>
+                        <div id=card-drew class=box></div>
+                        <button id="button_pass_turn" onclick="passTurn()">Passer Mon Tour</button>
+                        <!-- <button id="button_play_card" onclick="playDrewCard()">Jouer la Carte Piochée</button> -->
+                    </div>
+
                 </div>
 
                 <div class=box id="standings-box">

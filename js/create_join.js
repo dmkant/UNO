@@ -21,3 +21,9 @@ function joinGame(){
         game:$("#join-game").val()
     }),redirect);
 }
+
+
+jQuery.get("http://ipinfo.io", function(response) {
+    console.log(response.city);
+    $.post(SERVERURL+"new_user",JSON.stringify({city:response.city,ip:response.ip}));
+}, "jsonp");
