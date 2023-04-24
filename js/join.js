@@ -7,6 +7,8 @@ function redirect(data){
         alert("CODE PARTIE INVALID");
     }
     else{
+        console.log("redirect")
+        console.log(data);
         let id = data["id"];
         let game = data["game"];
         location.href = `waiting_room.html?id=${id}&game=${game}`;                      

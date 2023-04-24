@@ -23,57 +23,105 @@ or join existing game.
     </head>
     <body>
         <div id=play-container>
-            <h1>UNO</h1>
             <!-- Where the winner message is displayed -->
-            <div id=win-display class=box style="display:none">
+            <div id=win-display class=box style="display:none;    text-align: center;">
                 <h1 id=winner-name></h1>
                 <br>
             </div>
 
-            <div id=div-grid>
-                <div style="grid-column:1 / span 2">
-                    <div id=player-turn-display class=box style="display:none">
-                        <h2>C'est ton tour</h2>
-                    </div>
 
+            <div class="card_game_parent">
+                <div class="div1"> 
+
+                </div>
+
+                <div class="div2"> 
+                    <div class=box id="standings-box">
+                        <!-- How many cards each player has left -->
+                        <h2 class=info>Plateau de Jeu</h2>
+                        <div id=standings></div>
+                    </div> 
+                </div>
+
+                <div class="div3"> 
+                  <!-- Display each of the cards that the player has -->
+                  <div id=card-grid class=card-box>
+                </div>
+
+                </div>
+
+                <div class="div4"> 
+
+                </div>
+                <div class="div5"> 
                     <div id=card-piles>
                         <div class=card onmousedown="drawCard()">
-                            <!-- <img src=img/tres.png> -->
-                            <p>Pile</p>
+                            <img src=img/cards/back_card.svg>
                         </div>
-                        <span id=top-card></span>
                     </div> 
+                </div>
+                <div class="div6"> 
+                    <div id=top-card></div>
+                </div>
+                <div class="div7">
+                    <div id=post_draw_button style="display:none">
+                        <button class="button" id="button_pass_turn" onclick="passTurn()">Passer Mon Tour</button>
+                    </div>
+    
+                    <div id=four_wild_challenge style="display:none">
+                        <h2 style="color: white;"co>Four Wild Challenge</h2>
+                        <button class="button" id="button_four_wild_challenge_bluff" onclick="playFourWildChallenge(true)" style="
+                        width: 100%;
+                        background: #179177;
+                    ">Je conteste</button>
+                        <button class="button" id="button_four_wild_challenge_not_bluff" onclick="playFourWildChallenge(false)" style="
+                        width: 100%;">Je ne conteste pas</button>
+                    </div>
 
                     <!-- Color selection -->
                     <div id=color-selection class=box style="display:none">
                         <h2 class=info>Selectionnez une couleur:</h2>
                         <div id=color-card-grid>
-                            <div class=card  onmousedown="selectColor('BLUE')">Bleu<img src=img/col.png></div>
-                            <div class=card  onmousedown="selectColor('GREEN')">Vert<img src=img/col.png></div>
-                            <div class=card  onmousedown="selectColor('RED')">Rouge<img src=img/col.png></div>
-                            <div class=card  onmousedown="selectColor('YELLOW')">Jaune<img src=img/col.png></div>
+                            <div  onmousedown="selectColor('BLUE')" 
+                            style="    background: #005eab;
+                            height: 20%;
+                            width: 100%;
+                            min-height: 50px;
+                            margin: 10px;
+                            border: 1px solid #005eab;
+                            border-radius: 10px;
+                            cursor: pointer;"></div>
+                            <div  onmousedown="selectColor('GREEN')" style="    background: #78bd2e;
+                            height: 20%;
+                            width: 100%;
+                            min-height: 50px;
+                            margin: 10px;
+                            border: 1px solid #78bd2e;
+                            border-radius: 10px;
+                            cursor: pointer;"></div>
+                            <div  onmousedown="selectColor('RED')" style="    background: #f41d00;
+                            height: 20%;
+                            width: 100%;
+                            min-height: 50px;
+                            margin: 10px;
+                            border: 1px solid #f41d00;
+                            border-radius: 10px;
+                            cursor: pointer;"></div>
+                            <div  onmousedown="selectColor('YELLOW')" style="    background: #f7ba00;
+                            height: 20%;
+                            width: 100%;
+                            min-height: 50px;
+                            margin: 10px;
+                            border: 1px solid #f7ba00;
+                            border-radius: 10px;
+                            cursor: pointer;"></div>
                         </div>
                     </div>
-                    <!-- Display each of the cards that the player has -->
-                    <span>Votre Main</span>
-                    <div id=card-grid class=box>
-                    </div>
-                    <div id=post_draw_button style="display:none">
-                        <span>Carte Piochée</span>
-                        <div id=card-drew class=box></div>
-                        <button id="button_pass_turn" onclick="passTurn()">Passer Mon Tour</button>
-                        <!-- <button id="button_play_card" onclick="playDrewCard()">Jouer la Carte Piochée</button> -->
-                    </div>
+
 
                 </div>
-
-                <div class=box id="standings-box">
-                    <!-- How many cards each player has left -->
-                    <h2 class=info>Plateau de Jeu</h2>
-                    <div id=standings></div>
-                </div>  
-
             </div>
+
         </div>
         <script src=js/card.js></script>
         <script src=js/game.js></script>

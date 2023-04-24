@@ -5,8 +5,9 @@ Waiting room. View currently joined players, add AI players, start game once rea
 <html>
     <head>
         <title>ENSAI UNO</title>
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel=stylesheet href=style/style.css>
+        <link rel=stylesheet href=style/cover.css>
         <link rel=icon href=img/logo.png>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,33 +22,60 @@ Waiting room. View currently joined players, add AI players, start game once rea
         <meta property="twitter:card" content="summary_large_image">
     </head>
     <body>
-        <div id=container>
-            <h1>UNO</h1>
-            <h2 class=info>Salle d'Attende</h2>
-            <div class=box>
-                <h2>CODE: <span id="game-id"></span></h2>
-                <div onclick="copyInvite()" style="cursor:pointer">
-                    <h2 class=info>Lien d'invitation: (cliquer pour copier):</h2>
-                    <h3><a id="invite-link" target="_blank"></a></h3>
+
+
+        <div class=container style="    text-align: center;">
+            <h1 style="font-size: 100px; "> JEUX UNO <img src="img/uno_icon.png" style="width: 20%;"/> </h1>
+            <div class="waiting_parent">
+                <div class="waiting_div4"> 
+                    <h2 style="    text-align: left;">
+                        Salle d'Attende
+                    </h2>
                 </div>
-            </div>
-            <div id=div-wrapper>
-                <div class=box>
+
+                <div class="waiting_div2"> 
                     <h2>JOUEURS DE LA PARTIE</h2>
                     <i>Si tu es le maître de la partie, tu peux supprimer des joueurs en cliquant</i>
-                    <ul id="players">
-                    </ul>
+                    <ul id="players"></ul>
                 </div>
-                <label for="see_all_cards">
-                    <input type="checkbox" id="see_all_cards" name="see_all_cards">  Voir les cartes de tous les joueurs 
-                 </label>
-                <div class=box>
-                    <button onclick="addAI()">AJOUTER UNE IA</button>
+
+                <div class="waiting_div3"> 
+                    <button  class="button" onclick="addAI('RandomAgent')" style="    font-size: medium;">Ajouter un RandomAgent</button>
                     <br>
-                    <button onclick="startGame()">COMMENCER LA PARTIE</button>
+                    <button  class="button" onclick="addAI('RandomAgent')" style="    font-size: medium;">Ajouter un QAgent</button>
+                    <br>                    
+                    <button  class="button" onclick="addAI('RandomAgent')" style="    font-size: medium;">Ajouter un DeepQAgent</button>
+                    <br>
+                    <label for="see_all_cards">
+                        <input type="checkbox" id="see_all_cards" name="see_all_cards">  Voir les cartes de tous les joueurs 
+                     </label>
                 </div>
+
+                <div class="waiting_div1" style="    display: grid;    margin: 2%;
+                border-bottom: solid;">
+                    <div class="waiting_div5" > 
+                        <h4>CODE: <span id="game-id"></span></h4>
+                    </div>
+    
+                    <div class="waiting_div6"> 
+                        <div onclick="copyInvite()" style="cursor:pointer">
+                            <a id="invite-link" target="_blank"><h4 class=info>Lien d'invitation: (cliquer pour copier)</h4></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="waiting_div7"> 
+                    <button  class="button" onclick="startGame()" style="    font-size: larger;background: #53b616;
+                    ">COMMENCER LA PARTIE</button>
+                </div>
+
             </div>
+
+
         </div>
+        <br>
+        <footer class="mastfoot" style="    position: absolute;bottom: 0;margin: 20px;">By Timothée Obrecht, Anne-Sophie Le Bayon, Hugo Miccinilli - 2023</footer>
+
         <script src=js/waiting_room.js></script>
     </body>
 </html>

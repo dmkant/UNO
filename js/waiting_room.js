@@ -4,16 +4,18 @@ let id = urlParams.get("id");
 
 console.log("test")
 console.log(game)
+getPlayers();
 
 // Display game ID
 $("#game-id").html(game);
-$("#invite-link").html(DOMAINE+"join?game="+game);
+// $("#invite-link").html(DOMAINE+"join?game="+game);
 $("#invite-link").attr("href", DOMAINE+"join.html?game="+game)
 
 /*Add an AI player to the game*/
-function addAI(){
+function addAI(agent){
     $.post(SERVERURL+"addAI",JSON.stringify({
         game:game,
+        agent:agent
     }),getPlayers);
 }
 

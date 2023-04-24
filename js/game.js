@@ -32,6 +32,8 @@ function getData(){
                 
                 setTopcard(data["top_card"]);
                 setCards(data["player_cards"]);
+                setFourWildChallenge(data["four_wild_challenge"]);
+                
                 setStandings(data["all_player_cards"]);
                 setPlayerTurnDisplay();
                 setPassTurnDisplay(data["has_drew_card"]);
@@ -45,7 +47,8 @@ function setCards(cards){
     $("#card-grid").html("");
     // Add each card
     for (let card of cards){
-        $("#card-grid").append(getCardHTML(card,true));
+
+        $("#card-grid").append(getCardHTML(card,true,turn != player_turn));
     }
 }
 
@@ -56,14 +59,26 @@ function setClassement(){
                 console.log("error: game not found");
             }
             else{
+                $("#win-display").append( "<h2> Voici les points de chaque joueur </h2>");
+                $("#win-display").append( "<ul>");
                 for (let player of players){
                     player_pseudo = player["pseudo"];
                     player_total_points = player["total_points"];
-                    $("#win-display").append( `<div class=card><p> ${player_pseudo} - ${player_total_points}</p></div>`);
+                    $("#win-display").append( `<li> ${player_pseudo}: ${player_total_points} points</li>`);
                 }
+                $("#win-display").append( "</ul> <img src='img/uno_icon.png' style='width: 30%;'/>");
             }
         }
     )
+}
+
+function setFourWildChallenge(four_wild_challenge){
+    if (turn == player_turn && four_wild_challenge){
+        $("#four_wild_challenge").css("display", "block");
+        $("#card-grid").css("display", "none");
+    }else{
+        $("#four_wild_challenge").css("display", "none");
+    }
 }
 
 function setStandings(standings){
@@ -77,9 +92,13 @@ function setStandings(standings){
         nb_card = player["cards"].length;
 
         let div_html = "<div class=player-info>";
-        if (i == turn){
-            div_html = '<div class=player-info style="background-color:red;border:4px solid black">';
+        if (i == turn && i!=player_turn){
+            div_html = '<div class=player-info style="background-color: #cecfce;border: 2px solid #cecfce;color: #535c61;">';
         }
+        if (i == turn && i==player_turn){
+            div_html = '<div class=player-info style="background-color: #7cc332;border: 2px solid #7cc332;color: #535c61;">';
+        }
+        
         div_html += `<h2>${player["pseudo"]}</h2>`;
 
         div_html += "<br><div class=marker-card-div>";
@@ -88,15 +107,21 @@ function setStandings(standings){
             card_value = card["value"];
             card_color = card["color"];
 
-            if (i==0){
-                div_html += `<img src=img/logo2.png class=marker-card style='position:relative'>`;
-            }
-            else{
-                div_html += `<img src=img/logo2.png class=marker-card style='left:${i*8}%'>`;
+            if (card["color"] == "None"){
+                card_color = "black";
             }
 
             if (dev_mode.toLowerCase() === "true"){
-                div_html += `<span> ${card_value} - ${card_color} </span>`;
+                src = `img/cards/${card_color}/${card_value}.svg`;
+            }else{
+                src = "img/cards/back_card.svg";
+            }
+
+            if (i==0){
+                div_html += `<img src=${src} class=marker-card style='position:relative'>`;
+            }
+            else{
+                div_html += `<img src=${src} class=marker-card style='left:${i*500}%'>`;
             }
         }
         div_html += "</div></div>";
@@ -104,8 +129,10 @@ function setStandings(standings){
 
         // Check if someone has won and display winner message
         if (nb_card == 0){
+            $(".card_game_parent").css("display", "none");
+
             $("#win-display").css("display","block");
-            $("#winner-name").html(`${player["pseudo"]} won the game!`);
+            $("#winner-name").html(`${player["pseudo"]} est champion de cette partie!`);
             setClassement();
             // Stop the update interval
             clearInterval(dataInterval);
@@ -168,8 +195,9 @@ function playCard(card){
 
     // This function may be called by the color-selection section,
     // which means we need to hide it on click
-    $("#color-selection").css("display", "none");
-    $("#post_draw_button").css("display", "none");
+    // $("#color-selection").css("display", "none");
+    // $("#post_draw_button").css("display", "none");
+    
     card_id_selected = "";
 
     // Send request to play card
@@ -194,13 +222,6 @@ function drawCard(){
         game:game,
         id:id,
     }),getData);
-}
-
-function setDrewCard(card){
-    // Clear currently displayed cards
-    $("#card-drew").html("");
-    // Add each card
-    $("#card-grid").append(getDrewCardHTML(card));
 }
 
 function passTurn(){
@@ -250,9 +271,9 @@ function showColorSelection(card_id){
         return "not player turn";
     }
     card_id_selected = card_id;
-    $("#color-selection").css("display", "block");
     $("#card-grid").css("display", "none");
-    $("#post_draw_button").css("display", "none");
+    $("#button_pass_turn").prop("disabled",true);
+    $("#color-selection").css("display", "block");
 }
 
 function selectColor(color){
@@ -264,7 +285,7 @@ function selectColor(color){
         return "not player turn";
     }
 
-    
+    $("#color-selection").css("display", "none"); 
     // Send request to select color
     $.post(SERVERURL+"select_color",JSON.stringify({
             game:game,
@@ -273,6 +294,32 @@ function selectColor(color){
             color_selected:color,
 
     }),getData);
-    playCard(card_id_selected);
+    // playCard(card_id_selected);
+    $("#card-grid").css("display", "block");
+    $("#button_pass_turn").prop("disabled",false);
+}
+
+function playFourWildChallenge(is_bluffing){
+    console.log("playFourWildChallenge");
+    console.log(is_bluffing);
+
+    if (game_over){
+        return "game over";
+    }
+
+    // Check if turn is correct
+    if (turn != player_turn){
+        return "not player turn";
+    }
+
+    $("#four_wild_challenge").css("display", "none");
+    card_id_selected = "";
+
+    // Send request to play card
+    $.post(SERVERURL+"four_wild_challenge",JSON.stringify({
+        game:game,
+        id:id,
+        is_bluffing:is_bluffing
+    }),getData);
     $("#card-grid").css("display", "block");
 }
